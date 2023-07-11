@@ -1,0 +1,129 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Tremec.ScriptAgent";
+
+package TestControl;
+
+// version : 230711-0929
+
+service TestControlService {
+  rpc RegisterTestPlan (RegisterTestPlanRequest) returns (RegisterTestPlanReply);
+  rpc UnregisterTestPlan(UnregisterTestPlanRequest) returns (UnregisterTestPlanReply);
+  rpc RunTestPlan(RunTestPlanRequest) returns (RunTestPlanReply);
+  rpc AbortTestPlan(AbortTestPlanRequest) returns (AbortTestPlanReply);
+
+  rpc RegisterTestCase (RegisterTestCaseRequest) returns (RegisterTestCaseReply);
+  rpc UnregisterTestCase (UnregisterTestCaseRequest) returns (UnregisterTestCaseReply);
+  rpc RunTestCase(RunTestCaseRequest) returns (RunTestCaseReply);
+  rpc AbortTestCase(AbortTestCaseRequest) returns (AbortTestCaseReply);
+
+  rpc GetStatus (GetStatusRequest) returns (GetStatusReply);
+  rpc GetProgress (GetProgressRequest) returns (GetProgressReply);
+}
+
+message RegisterTestPlanRequest {
+	string TestPlanName = 1;
+}
+
+message RegisterTestPlanReply {
+	oneof RegisterTestPlanReply{
+		ErrorCode errorCode = 1;
+		GUID testPlanGuid = 2;
+	}
+}
+
+message UnregisterTestPlanRequest {
+	GUID testPlanGuid = 1;
+}
+
+message UnregisterTestPlanReply {
+}
+
+message AbortTestPlanRequest {
+
+}
+
+message AbortTestPlanReply {
+
+}
+
+message RegisterTestCaseRequest {
+	string testCaseName = 1;
+	GUID testPlanGuid = 2;
+	map<string, TestResult> TestReport = 3;
+
+	enum TestResult {
+		NotTested = 0;
+		NotTestable = 1;
+		Failed = 2;
+		Passed = 3;
+	}
+}
+
+message RegisterTestCaseReply {
+	oneof RegisterTestCaseReply {
+		ErrorCode errorCode = 1;
+		GUID testCaseGuid = 2;
+	}
+}
+
+message UnregisterTestCaseRequest {
+	GUID testCaseGuid = 1;
+}
+
+message UnregisterTestCaseReply {
+}
+
+message AbortTestCaseRequest {
+
+}
+
+message AbortTestCaseReply {
+
+}
+
+message RunTestPlanRequest {
+}
+
+message RunTestPlanReply {
+}
+
+message RunTestCaseRequest {
+}
+
+message RunTestCaseReply {
+}
+
+message RegisterTestStepRequest {
+	string scriptPath = 1;
+	string scriptFunction = 2;
+	GUID testCaseGuid = 3;
+}
+
+message RegisterTestStepReply {
+	ErrorCode errorCode = 1;
+}
+
+message GetStatusRequest {
+}
+
+message GetStatusReply {
+}
+
+message GetProgressRequest {
+}
+
+message GetProgressReply {
+}
+
+message GUID {
+	string value = 1;
+}
+
+message ErrorCode {
+	bool guidInvalid = 1;
+	bool guidEmpty = 2;
+	bool guidInactive = 3;
+	bool guidActive = 4;
+	bool reportServiceCommunicationError = 5;
+}
